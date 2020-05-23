@@ -189,7 +189,7 @@ class WeekCalendar extends Component {
     let weekDaysNames = weekDayNames(firstDay);
 
     return (
-      <View testID={this.props.testID} style={[allowShadow && this.style.containerShadow, !hideDayNames && {paddingBottom: 6}]}>
+      <View style={[allowShadow && this.style.containerShadow, !hideDayNames && {paddingBottom: 6}]}>
         {!hideDayNames &&
           <View style={[this.style.week, {marginTop: 12, marginBottom: -2}]}>
             {/* {this.props.weekNumbers && <Text allowFontScaling={false} style={this.style.dayHeader}></Text>} */}
@@ -197,11 +197,10 @@ class WeekCalendar extends Component {
               <Text 
                 allowFontScaling={false} 
                 key={idx} 
+                accessible={false} 
                 style={this.style.dayHeader} 
                 numberOfLines={1} 
-                accessibilityLabel={''}
-                // accessible={false} // not working
-                // importantForAccessibility='no'
+                importantForAccessibility='no'
               >
                 {day}
               </Text>

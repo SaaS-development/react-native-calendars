@@ -1,16 +1,17 @@
-import React, {Component} from 'react';
-import {FlatList, ActivityIndicator, View} from 'react-native';
+import React, { Component } from 'react';
+import { FlatList, ActivityIndicator, View, Text } from 'react-native';
 import Reservation from './reservation';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
 import dateutils from '../../dateutils';
 import styleConstructor from './style';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 
 class ReservationList extends Component {
   static displayName = 'IGNORE';
-  
+
   static propTypes = {
     // specify your item comparison function for increased performance
     rowHasChanged: PropTypes.func,
@@ -41,14 +42,14 @@ class ReservationList extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.styles = styleConstructor(props.theme);
-    
+
     this.state = {
       reservations: []
     };
-    
-    this.heights=[];
+
+    this.heights = [];
     this.selectedDay = this.props.selectedDay;
     this.scrollOver = true;
   }
@@ -71,7 +72,7 @@ class ReservationList extends Component {
         scrollPosition += this.heights[i] || 0;
       }
       this.scrollOver = false;
-      this.list.scrollToOffset({offset: scrollPosition, animated: true});
+      this.list.scrollToOffset({ offset: scrollPosition, animated: true });
     }
     this.selectedDay = props.selectedDay;
     this.updateDataSource(reservations.reservations);
@@ -114,7 +115,7 @@ class ReservationList extends Component {
     this.heights[ind] = event.nativeEvent.layout.height;
   }
 
-  renderRow({item, index}) {
+  renderRow({ item, index }) {
     return (
       <View onLayout={this.onRowLayoutChange.bind(this, index)}>
         <Reservation
@@ -156,7 +157,7 @@ class ReservationList extends Component {
 
   getReservations(props) {
     if (!props.reservations || !props.selectedDay) {
-      return {reservations: [], scrollPosition: 0};
+      return { reservations: [], scrollPosition: 0 };
     }
     let reservations = [];
     if (this.state.reservations && this.state.reservations.length) {
@@ -182,38 +183,41 @@ class ReservationList extends Component {
       iterator.addDays(1);
     }
 
-    return {reservations, scrollPosition};
+    return { reservations, scrollPosition };
   }
 
   render() {
+
     if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString('yyyy-MM-dd')]) {
       if (this.props.renderEmptyData) {
         return this.props.renderEmptyData();
       }
       return (
-        <ActivityIndicator style={{marginTop: 80}} color={this.props.theme && this.props.theme.indicatorColor}/>
+        <ActivityIndicator style={{ marginTop: 80 }} color={this.props.theme && this.props.theme.indicatorColor} />
       );
     }
     return (
-      <FlatList
-        ref={(c) => this.list = c}
-        style={this.props.style}
-        contentContainerStyle={this.styles.content}
-        renderItem={this.renderRow.bind(this)}
-        data={this.state.reservations}
-        onScroll={this.onScroll.bind(this)}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={200}
-        onMoveShouldSetResponderCapture={() => {this.onListTouch(); return false;}}
-        keyExtractor={(item, index) => String(index)}
-        refreshControl={this.props.refreshControl}
-        refreshing={this.props.refreshing || false}
-        onRefresh={this.props.onRefresh}
-        onScrollBeginDrag={this.props.onScrollBeginDrag}
-        onScrollEndDrag={this.props.onScrollEndDrag}
-        onMomentumScrollBegin={this.props.onMomentumScrollBegin}
-        onMomentumScrollEnd={this.props.onMomentumScrollEnd}
-      />
+      <View style={{ flex: 1, marginTop: RFValue(20) }}>
+        <FlatList
+          ref={(c) => this.list = c}
+          style={this.props.style}
+          contentContainerStyle={this.styles.content}
+          renderItem={this.renderRow.bind(this)}
+          data={this.state.reservations}
+          onScroll={this.onScroll.bind(this)}
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={200}
+          onMoveShouldSetResponderCapture={() => { this.onListTouch(); return false; }}
+          keyExtractor={(item, index) => String(index)}
+          // refreshControl={this.props.refreshControl}
+          // refreshing={this.props.refreshing || false}
+          // onRefresh={this.props.onRefresh}
+          onScrollBeginDrag={this.props.onScrollBeginDrag}
+          onScrollEndDrag={this.props.onScrollEndDrag}
+          onMomentumScrollBegin={this.props.onMomentumScrollBegin}
+          onMomentumScrollEnd={this.props.onMomentumScrollEnd}
+        />
+      </View>
     );
   }
 }

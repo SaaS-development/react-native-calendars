@@ -1,14 +1,15 @@
-import React, {Component} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import React, { Component } from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
-import {shouldUpdate} from '../../../component-updater';
+import { shouldUpdate } from '../../../component-updater';
 import styleConstructor from './style';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 
 class Day extends Component {
   static displayName = 'IGNORE';
-  
+
   static propTypes = {
     // TODO: disabled props should be removed
     state: PropTypes.oneOf(['disabled', 'today', '']),
@@ -50,7 +51,7 @@ class Day extends Component {
       return validDots.map((dot, index) => {
         return (
           <View key={dot.key ? dot.key : index} style={[baseDotStyle,
-            {backgroundColor: marking.selected && dot.selectedDotColor ? dot.selectedDotColor : dot.color}]}/>
+            { backgroundColor: marking.selected && dot.selectedDotColor ? dot.selectedDotColor : dot.color }]} />
         );
       });
     }
@@ -62,34 +63,33 @@ class Day extends Component {
     const textStyle = [this.style.text];
     const marking = this.props.marking || {};
     const dot = this.renderDots(marking);
-    const isDisabled = typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled';
 
     if (marking.selected) {
       containerStyle.push(this.style.selected);
       textStyle.push(this.style.selectedText);
       if (marking.selectedColor) {
-        containerStyle.push({backgroundColor: marking.selectedColor});
+        containerStyle.push({ backgroundColor: marking.selectedColor });
       }
-    } else if (isDisabled) {
+    } else if (typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
       textStyle.push(this.style.todayText);
     }
-    
+
     return (
-      <TouchableOpacity
-        testID={this.props.testID}
-        style={containerStyle}
-        onPress={this.onDayPress}
-        onLongPress={this.onDayLongPress}
-        disabled={marking.disableTouchEvent}
-        accessibilityRole={isDisabled ? undefined : 'button'}
-        accessibilityLabel={this.props.accessibilityLabel}
-      >
-        <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-        <View style={{flexDirection: 'row'}}>{dot}</View>
-      </TouchableOpacity>
+      <View style={{alignItems:'center'}}>
+        <TouchableOpacity
+          testID={this.props.testID}
+          style={containerStyle}
+          onPress={this.onDayPress}
+          onLongPress={this.onDayLongPress}
+          disabled={marking.disableTouchEvent}
+        >
+          <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', marginTop:RFValue(4) }}>{dot}</View>
+      </View>
     );
   }
 }

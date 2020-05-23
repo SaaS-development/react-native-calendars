@@ -179,7 +179,6 @@ class Calendar extends Component {
     const DayComp = this.getDayComponent();
     const date = day.getDate();
     const dateAsObject = xdateToData(day);
-    const accessibilityLabel = `${state === 'today' ? 'today' : ''} ${day.toString('dddd MMMM d')} ${this.getMarkingLabel(day)}`;
 
     return (
       <View style={{flex: 1, alignItems: 'center'}} key={id}>
@@ -191,41 +190,11 @@ class Calendar extends Component {
           onLongPress={this.longPressDay}
           date={dateAsObject}
           marking={this.getDateMarking(day)}
-          accessibilityLabel={accessibilityLabel}
         >
           {date}
         </DayComp>
       </View>
     );
-  }
-
-  getMarkingLabel(day) {
-    let label = '';
-    const marking = this.getDateMarking(day);
-    
-    if (marking.accessibilityLabel) {
-      return marking.accessibilityLabel;
-    }
-    
-    if (marking.selected) {
-      label += 'selected ';
-      if (!marking.marked) {
-        label += 'You have no entries for this day ';
-      }
-    } 
-    if (marking.marked) {
-      label += 'You have entries for this day ';
-    } 
-    if (marking.startingDay) {
-      label += 'period start ';
-    } 
-    if (marking.endingDay) {
-      label += 'period end ';
-    }
-    if (marking.disabled || marking.disableTouchEvent) {
-      label += 'disabled ';
-    }
-    return label;
   }
 
   getDayComponent() {
@@ -260,17 +229,8 @@ class Calendar extends Component {
     }
   }
 
-  renderWeekNumber(weekNumber) {
-    return (
-      <Day 
-        key={`week-${weekNumber}`} 
-        theme={this.props.theme} 
-        marking={{disableTouchEvent: true}} 
-        state='disabled'
-      >
-        {weekNumber}
-      </Day>
-    );
+  renderWeekNumber (weekNumber) {
+    return <Day key={`week-${weekNumber}`} theme={this.props.theme} marking={{disableTouchEvent: true}} state='disabled'>{weekNumber}</Day>;
   }
 
   renderWeek(days, id) {
@@ -304,13 +264,8 @@ class Calendar extends Component {
     }
 
     return (
-      <View
-        style={[this.style.container, this.props.style]}
-        accessibilityElementsHidden={this.props.accessibilityElementsHidden} // iOS
-        importantForAccessibility={this.props.importantForAccessibility} // Android
-      >
+      <View style={[this.style.container, this.props.style]}>
         <CalendarHeader
-          testID={this.props.testID}
           ref={c => this.header = c}
           style={this.props.headerStyle}
           theme={this.props.theme}

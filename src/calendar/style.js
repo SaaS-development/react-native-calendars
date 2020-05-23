@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import * as defaultStyle from '../style';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 const STYLESHEET_ID = 'stylesheet.calendar.main';
 
@@ -9,7 +10,8 @@ export default function getStyle(theme={}) {
     container: {
       paddingLeft: 5,
       paddingRight: 5,
-      backgroundColor: appStyle.calendarBackground
+      backgroundColor: appStyle.calendarBackground,
+      borderRadius: RFValue(20) 
     },
     monthView: {
       backgroundColor: appStyle.calendarBackground
